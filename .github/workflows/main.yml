@@ -7,7 +7,7 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v1
       - name: Compile statutes
-        uses: xu-cheng/latex-action
+        uses: xu-cheng/latex-action@master
         with:
           root_file: statutes.tex
           args: -pdf -file-line-error -synctex=1 -interaction=nonstopmode -file-line-error -recorder -f
