@@ -16,4 +16,4 @@ jobs:
         if: failure()
         run: |
           value=`cat statutes.log`
-          echo $value
+          echo "$value"
