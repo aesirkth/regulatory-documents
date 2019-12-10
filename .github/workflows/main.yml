@@ -1,4 +1,4 @@
-name: Build LaTeX document
+name: Build statutes
 on: [push]
 jobs:
   build_latex:
@@ -6,14 +6,23 @@ jobs:
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v1
-      - name: Compile statutes
+      - name: Compile PDF
         uses: xu-cheng/latex-action@master
         with:
           root_file: statutes.tex
           args: -pdf -file-line-error -synctex=1 -interaction=nonstopmode -file-line-error -recorder -f
-      - name: Print statutes.log if failure
+        continue-on-error: true
+      - name: Print LaTeX log
         shell: bash
-        if: failure()
+        if: failure() || success()
         run: |
           value=`cat statutes.log`
           echo "$value"
+      - name: Upload PDF
+        uses: actions/upload-artifact@v1.0.0
+        if: failure() || success()
+        with:
+          # Artifact name
+          name: statutes.pdf
+          # Directory containing files to upload
+          path: statutes.pdf
