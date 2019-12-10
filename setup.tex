@@ -1,0 +1,71 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[margin={3cm},headheight=30pt]{geometry}
+
+\usepackage[default]{sourcesanspro}
+
+\usepackage{hyperref}
+\usepackage{xkeyval}
+\usepackage{apacite}
+\usepackage[T1]{fontenc}
+\usepackage{newpxtext,newpxmath}
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{changepage}
+\usepackage{chngcntr}
+\usepackage{blindtext}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{titling}
+\usepackage{enumitem}
+\usepackage[explicit]{titlesec}
+
+
+\title{
+  \includegraphics[width=5cm]{logo.png}
+  \\
+  \vspace{2cm}
+  \bfseries{\Huge{\documenttitle}}
+  \\
+  \vspace{0.5cm}
+  \bfseries{\Large{\color{headerGray}{Association of Engineering Students in Rocketry}}}
+}
+\date{\lastrevised}
+
+
+\definecolor{headerGray}{gray}{0.4}
+
+\renewcommand{\headrulewidth}{0pt}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\raisebox{-0.1\height}{\includegraphics[height=10mm]{logo.png}}}
+
+\chead{}
+
+\rhead{
+  \textbf{
+    \documenttitle
+  }
+  \\
+  \vspace{4pt}
+  \lastrevised
+}
+\rfoot{\thepage}
+
+
+
+\renewcommand{\thesection}{§ \arabic{section}}
+
+\addtocontents{toc}{\setcounter{tocdepth}{1}}
+
+\titleformat{name=\section,numberless}[block]{\centering\normalfont\Large\bfseries}{}{1em}{\addcontentsline{toc}{section}{#1}#1}
+
+\titleformat{\section}[block]{\normalfont\large\bfseries}{\thesection}{1em}{#1}
+
+\renewcommand{\thesubsection}{§ \arabic{subsection}}
