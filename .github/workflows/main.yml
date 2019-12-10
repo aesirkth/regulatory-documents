@@ -7,11 +7,13 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v1
       - name: Compile statutes
-        uses: xu-cheng/latex-action@master
+        uses: xu-cheng/latex-action
         with:
           root_file: statutes.tex
           args: -pdf -file-line-error -synctex=1 -interaction=nonstopmode -file-line-error -recorder -f
-      - uses: actions/upload-artifact@v1
-        with:
-          name: statutes.pdf
-          path: statutes.pdf
+      - name: Print statutes.log if failure
+        shell: bash
+        if: failure()
+        run: |
+          value=`cat statutes.log`
+          echo $value
