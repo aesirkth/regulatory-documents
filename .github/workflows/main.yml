@@ -10,7 +10,7 @@ jobs:
         uses: xu-cheng/latex-action@master
         with:
           root_file: statutes.tex
-          args: -pdf -file-line-error -synctex=1 -interaction=nonstopmode -file-line-error -recorder -f -outdir=built
+          args: -pdf -file-line-error -synctex=1 -interaction=nonstopmode -file-line-error -recorder -f
         continue-on-error: true
       - name: Print LaTeX log
         shell: bash
@@ -18,6 +18,12 @@ jobs:
         run: |
           value=`cat statutes.log`
           echo "$value"
+      - name: Copy to output directory
+        shell: bash
+        if: failure() || success()
+        run: |
+          mkdir built
+          mv statutes.pdf built/statutes.pdf
       - name: Upload PDF
         uses: actions/upload-artifact@v1.0.0
         if: failure() || success()
