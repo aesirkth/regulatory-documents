@@ -56,4 +56,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            This commit was built and can be downloaded at ${{browser_download_url}}
+            This commit was built and can be downloaded at ${{  steps.upload-release-asset.browser_download_url }}
