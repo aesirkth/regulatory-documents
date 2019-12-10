@@ -37,11 +37,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.ref }}-${{ github.sha }}
+          release_name: ${{ github.ref }} at ${{ github.sha }}
           draft: false
           prerelease: true
-      - name: Upload Release Asset
+      - name: Upload Asset To Release
         id: upload-release-asset 
         uses: actions/upload-release-asset@v1.0.1
         env:
