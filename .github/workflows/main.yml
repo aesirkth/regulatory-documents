@@ -56,4 +56,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            This commit was built and can be downloaded at ${{ steps.upload-release-asset.outputs.browser_download_url }}
+            The statutes were automatically built by a :robot: in the :cloud: and can be downloaded at ${{ steps.upload-release-asset.outputs.browser_download_url }} :100:
