@@ -10,7 +10,7 @@ jobs:
         uses: xu-cheng/latex-action@master
         with:
           root_file: statutes.tex
-          args: -pdf -file-line-error -interaction=nonstopmode --force
+          args: -pdf -file-line-error -interaction=nonstopmode -f
       - uses: actions/upload-artifact@v1
         with:
           name: statutes.pdf
