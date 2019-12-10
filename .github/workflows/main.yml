@@ -10,7 +10,7 @@ jobs:
         uses: xu-cheng/latex-action@master
         with:
           root_file: statutes.tex
-          args: -pdf -file-line-error -synctex=1 -interaction=nonstopmode -file-line-error -recorder -f
+          args: -pdf -file-line-error -synctex=1 -interaction=nonstopmode -file-line-error -recorder -f -outdir=built
         continue-on-error: true
       - name: Print LaTeX log
         shell: bash
@@ -23,6 +23,6 @@ jobs:
         if: failure() || success()
         with:
           # Artifact name
-          name: statutes.pdf
+          name: Built Statutes
           # Directory containing files to upload
-          path: statutes.pdf
+          path: ./built
