@@ -1,0 +1,59 @@
+name: Build draft statutes
+on: [push]
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v1
+      - name: Compile PDF
+        uses: xu-cheng/latex-action@master
+        with:
+          root_file: statutes.tex
+          args: -pdf -file-line-error -synctex=1 -interaction=nonstopmode -file-line-error -recorder -f
+        continue-on-error: true
+      - name: Print LaTeX log
+        shell: bash
+        if: failure() || success()
+        run: |
+          value=`cat statutes.log`
+          echo "$value"
+      - name: Copy to output directory
+        shell: bash
+        if: failure() || success()
+        run: |
+          mkdir built
+          mv statutes.pdf built/statutes.pdf
+      - name: Upload PDF
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          # Artifact name
+          name: Built Statutes
+          # Directory containing files to upload
+          path: ./built
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Auto-built draft from ${{ github.ref }}
+          draft: true
+          prerelease: true
+      - name: Upload Asset To Release
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./built/statutes.pdf
+          asset_name: statutes.pdf
+          asset_content_type: application/pdf
+      - name: Create commit comment
+        uses: peter-evans/commit-comment@v1.0.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            The statutes were automatically built by a :robot: in the :cloud: and can be downloaded at ${{ steps.upload-release-asset.outputs.browser_download_url }} :100:
