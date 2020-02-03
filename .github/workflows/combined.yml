@@ -54,6 +54,16 @@ jobs:
           release_name: Auto-built draft from ${{ github.ref }}
           draft: github.ref != "master"
           prerelease: true
+      - name: Get current time
+        uses: srfrnk/current-time@master
+        id: current-time
+        with:
+          format: YYYY-MM-DD
+      - name: Use current time
+        env:
+          TIME: "${{ steps.current-time.outputs.time }}"
+          F_TIME: "${{ steps.current-time.outputs.formattedTime }}"
+        run: echo $TIME $F_TIME
       - name: Upload Statutes To Release
         id: upload-statutes-asset
         uses: actions/upload-release-asset@v1.0.1
@@ -62,7 +72,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./built/statutes.pdf
-          asset_name: statutes-${{ github.ref }}-${{ date "+%Y-%m-%d" }}.pdf
+          asset_name: statutes-${{ github.ref }}-${{ steps.current-time.outputs.formattedTime }}.pdf
           asset_content_type: application/pdf
       - name: Upload House Rules To Release
         id: upload-houseRules-asset
@@ -72,7 +82,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./built/houseRules.pdf
-          asset_name: houseRules-${{ github.ref }}-${{ date "+%Y-%m-%d" }}.pdf
+          asset_name: houseRules-${{ github.ref }}-${{ steps.current-time.outputs.formattedTime }}.pdf
           asset_content_type: application/pdf
       - name: Create commit comment
         uses: peter-evans/commit-comment@v1.0.1
