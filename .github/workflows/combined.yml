@@ -52,7 +52,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Auto-built draft from ${{ github.ref }}
-          draft: ${{ github.ref != "master" }}
+          draft: github.ref != "master"
           prerelease: true
       - name: Upload Statutes To Release
         id: upload-statutes-asset
