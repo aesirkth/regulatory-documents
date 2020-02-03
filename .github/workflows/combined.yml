@@ -52,7 +52,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Auto-built draft from ${{ github.ref }}
-          draft: github.ref != "master"
+          draft: true
           prerelease: true
       - name: Get current time
         uses: srfrnk/current-time@master
