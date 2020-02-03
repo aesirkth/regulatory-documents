@@ -1,4 +1,4 @@
-name: Build house rules
+name: Build documents
 on: [push]
 jobs:
   build_latex:
@@ -6,13 +6,25 @@ jobs:
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v1
-      - name: Compile PDF
+      - name: Compile statutes
+        uses: xu-cheng/latex-action@master
+        with:
+          root_file: statutes.tex
+          args: -pdf -file-line-error -synctex=1 -interaction=nonstopmode -file-line-error -recorder -f
+        continue-on-error: true
+      - name: Print statutes LaTeX log
+        shell: bash
+        if: failure() || success()
+        run: |
+          value=`cat statutes.log`
+          echo "$value"
+      - name: Compile house rules
         uses: xu-cheng/latex-action@master
         with:
           root_file: houseRules.tex
           args: -pdf -file-line-error -synctex=1 -interaction=nonstopmode -file-line-error -recorder -f
         continue-on-error: true
-      - name: Print LaTeX log
+      - name: Print house rules LaTeX log
         shell: bash
         if: failure() || success()
         run: |
@@ -23,12 +35,13 @@ jobs:
         if: failure() || success()
         run: |
           mkdir built
+          mv statutes.pdf built/statutes.pdf
           mv houseRules.pdf built/houseRules.pdf
-      - name: Upload PDF
+      - name: Upload PDFs
         uses: actions/upload-artifact@v1.0.0
         with:
           # Artifact name
-          name: Built House Rules
+          name: Built Statutes
           # Directory containing files to upload
           path: ./built
       - name: Create Release
@@ -39,10 +52,20 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Auto-built draft from ${{ github.ref }}
-          draft: true
+          draft: ${{ github.ref != "master" }}
           prerelease: true
-      - name: Upload Asset To Release
-        id: upload-release-asset
+      - name: Upload Statutes To Release
+        id: upload-statutes-asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./built/statutes.pdf
+          asset_name: statutes.pdf
+          asset_content_type: application/pdf
+      - name: Upload House Rules To Release
+        id: upload-houseRules-asset
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -56,4 +79,9 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            The house rules were automatically built by a :robot: in the :cloud: and can be downloaded at ${{ steps.upload-release-asset.outputs.browser_download_url }} :100:
+            The statutes and house rules were automatically built by a :robot: in the :cloud:!
+            They can be downloaded at 
+            ${{ steps.upload-statutes-asset.outputs.browser_download_url }}
+            and
+            ${{ steps.upload-houseRules-asset.outputs.browser_download_url }}
+            for users with push access to this repository :100:!
