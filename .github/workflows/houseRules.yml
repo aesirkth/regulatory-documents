@@ -1,4 +1,4 @@
-name: Build draft statutes
+name: Build house rules
 on: [push]
 jobs:
   build_latex:

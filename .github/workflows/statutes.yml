@@ -1,4 +1,4 @@
-name: Build draft statutes
+name: Build statutes
 on: [push]
 jobs:
   build_latex:
@@ -42,7 +42,7 @@ jobs:
           draft: true
           prerelease: true
       - name: Upload Asset To Release
-        id: upload-release-asset 
+        id: upload-release-asset
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
